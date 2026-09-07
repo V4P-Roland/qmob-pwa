@@ -1,6 +1,11 @@
-# Qalcurate
+# qmob
 
-Qalcurate is an offline-first Progressive Web App (PWA) for recording
+**qmob** (formerly named "Qalcurate" at the repository level) is one of the
+three Qalcurate platform prototypes — alongside **qweb** and **qbot** — kept
+under distinct names for now to avoid confusion with the overall Qalcurate
+brand while the platform is still being built.
+
+qmob is an offline-first Progressive Web App (PWA) for recording
 conversations, transcribing them live in the browser via the Web Speech API,
 and delivering the recording (title, timestamp, duration, transcript, and
 audio file) to a webhook of your choice — automatically, as soon as the
@@ -45,8 +50,8 @@ block both APIs on plain HTTP for any other host.
 ## Quick start (Docker Compose)
 
 ```bash
-git clone https://github.com/V4P-Roland/qalcurate.git
-cd qalcurate
+git clone https://github.com/V4P-Roland/qmob.git
+cd qmob
 docker compose up --build -d
 ```
 

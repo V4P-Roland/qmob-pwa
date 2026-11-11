@@ -3,25 +3,27 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Qalcurate — Gespräche aufnehmen &amp; transkribieren</title>
-<meta name="description" content="Qalcurate zeichnet Gespräche auf, transkribiert sie live im Browser und übermittelt sie automatisch per Webhook — auch wenn du zwischenzeitlich offline warst." />
+<title>qmob · Qalcurate — Gespräche aufnehmen &amp; transkribieren</title>
+<meta name="description" content="qmob zeichnet Gespräche auf, transkribiert sie live im Browser und übermittelt sie automatisch per Webhook — auch wenn du zwischenzeitlich offline warst." />
 
-<meta name="theme-color" content="#003027" />
+<meta name="theme-color" content="#0b1020" />
 <link rel="manifest" href="./manifest.json" />
+<link rel="icon" href="./assets/brand/favicon.svg" type="image/svg+xml" />
 <link rel="icon" href="./assets/icons/favicon-32.png" sizes="32x32" />
 <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Qalcurate" />
+<meta name="apple-mobile-web-app-title" content="qmob" />
 
-<meta property="og:title" content="Qalcurate — Gespräche aufnehmen & transkribieren" />
+<meta property="og:title" content="qmob · Qalcurate — Gespräche aufnehmen & transkribieren" />
 <meta property="og:description" content="Aufnahme, Live-Transkription und automatische Übermittlung per Webhook — auch offline." />
 <meta property="og:type" content="website" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
-<!-- Product Sans (Qalcurate brand font) is self-hosted via @font-face in style.css -->
+<!-- Inter (Qalcurate brand font) is self-hosted via @font-face in style.css -->
+<link rel="preload" href="./assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
 
 <link rel="stylesheet" href="./base.css" />
 <link rel="stylesheet" href="./style.css" />
@@ -39,9 +41,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
       <div class="brand">
-        <img class="brand-logo brand-logo-light" src="./assets/logo/qalcurate-icon-color.svg" alt="Qalcurate Logo" width="42" height="42" />
-        <img class="brand-logo brand-logo-dark" src="./assets/logo/qalcurate-icon-white.svg" alt="Qalcurate Logo" width="42" height="42" />
-        <span class="brand-name">Qalcurate</span>
+        <span class="brand-lockup" role="img" aria-label="Qalcurate Mobile">
+          <img class="brand-wordmark" src="./assets/brand/qalcurate-logo-white.svg" alt="" height="24" />
+          <span class="brand-sub" aria-hidden="true">MOBILE</span>
+        </span>
       </div>
     </div>
     <div class="header-actions">
@@ -183,7 +186,7 @@
         <h2 data-i18n="webhookHeading">Webhook</h2>
         <div class="field-group">
           <label for="webhookInput" data-i18n="webhookUrlLabel">Webhook-URL</label>
-          <input type="url" class="field-input" id="webhookInput" placeholder="https://dein-server.tld/webhook/qalcurate" data-i18n-placeholder="webhookUrlPlaceholder" data-testid="input-webhook-url" />
+          <input type="url" class="field-input" id="webhookInput" placeholder="https://app.qalcurate.com/api/integrations/qmob/…" data-i18n-placeholder="webhookUrlPlaceholder" data-testid="input-webhook-url" />
           <p class="field-hint" data-i18n="webhookHint">Jede Aufnahme wird als Formulardaten (Titel, Zeitstempel, Dauer, Transkript, Audiodatei) per POST an diese URL gesendet, sobald eine Internetverbindung besteht.</p>
         </div>
         <div class="btn-row">
@@ -205,8 +208,8 @@
       </div>
 
       <div class="settings-section">
-        <h2 data-i18n="aboutHeading">Über Qalcurate</h2>
-        <p class="about-text" data-i18n="aboutText">Qalcurate ist eine installierbare Web-App (PWA). Füge sie über das Browser-Menü „Zum Startbildschirm hinzufügen“ deinem Homescreen hinzu, um sie wie eine native App zu nutzen. Version 1.0.</p>
+        <h2 data-i18n="aboutHeading">Über qmob</h2>
+        <p class="about-text" data-i18n="aboutText">qmob ist die mobile App von Qalcurate, eine installierbare Web-App (PWA). Füge sie über das Browser-Menü „Zum Startbildschirm hinzufügen“ deinem Homescreen hinzu, um sie wie eine native App zu nutzen. Version 1.0.</p>
       </div>
     </section>
 
@@ -259,7 +262,5 @@
 </div>
 
 <script src="./app.js"></script>
-<!-- Qalcurate AI Assistant (Jotform AI Agent) -->
-<script src="https://v4p.jotform.com/agent/embedjs/01a01564686870008277e6758f552fbf6a03/embed.js"></script>
 </body>
 </html>

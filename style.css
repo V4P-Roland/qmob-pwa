@@ -1,48 +1,13 @@
 /* style.css — Qalcurate design tokens + components */
-/* Brand: Qalcurate — Discover. Sustain. Ability. */
+/* Brand: Qalcurate platform (navy, Action Blue, blue-cyan gradient, Inter) — 12/11/2026 */
 
 /* ============ FONTS ============ */
-/* Product Sans (display + body, Qalcurate brand typeface), JetBrains Mono (timer/readouts) via Google Fonts */
+/* Inter (Qalcurate brand typeface, self-hosted); timer digits use tabular figures */
 
 @font-face {
-  font-family: 'Product Sans';
-  src: url('./assets/fonts/ProductSans-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Product Sans';
-  src: url('./assets/fonts/ProductSans-Italic.woff2') format('woff2');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Product Sans';
-  src: url('./assets/fonts/ProductSans-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Product Sans';
-  src: url('./assets/fonts/ProductSans-MediumItalic.woff2') format('woff2');
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Product Sans';
-  src: url('./assets/fonts/ProductSans-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Product Sans';
-  src: url('./assets/fonts/ProductSans-Black.woff2') format('woff2');
-  font-weight: 800;
+  font-family: 'Inter';
+  src: url('./assets/fonts/InterVariable.woff2') format('woff2');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -56,9 +21,9 @@
   --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
   --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.25rem);
 
-  --font-display: 'Product Sans', 'General Sans', sans-serif;
-  --font-body: 'Product Sans', 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Menlo', monospace;
+  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Inter', system-ui, sans-serif;
 
   /* 4px spacing */
   --space-1: 0.25rem;
@@ -87,82 +52,82 @@
 }
 
 /* ============ COLOR — LIGHT (default) ============ */
-/* Qalcurate palette: Teal #0A4C3F · Deep Teal #003027 · Persian Teal #32A597 · Faded Teal #287F6E · Grey #D7E0DE */
+/* Qalcurate palette: Navy #0B1020 · Action Blue #1D63E8 · Blue #4F8CFF · Cyan #22D3EE (same tokens as app.qalcurate.com) */
 :root,
 [data-theme='light'] {
-  --color-bg: #f5f9f8;
+  --color-bg: #f7f9fc;
   --color-surface: #ffffff;
-  --color-surface-2: #fbfdfc;
-  --color-surface-offset: #eef4f2;
-  --color-surface-offset-2: #e3ece9;
-  --color-divider: #dce7e3;
-  --color-border: #c9d9d4;
+  --color-surface-2: #fbfcfe;
+  --color-surface-offset: #eef1f6;
+  --color-surface-offset-2: #e4e9f2;
+  --color-divider: #e4e9f2;
+  --color-border: #d3dae6;
 
-  --color-text: #0a2620;
-  --color-text-muted: #4f6b64;
-  --color-text-faint: #8fa69f;
-  --color-text-inverse: #f5f9f8;
+  --color-text: #0b1020;
+  --color-text-muted: #4a5578;
+  --color-text-faint: #7a849e;
+  --color-text-inverse: #ffffff;
 
-  /* Primary accent — Persian Teal (brand CTA) */
-  --color-primary: #32a597;
-  --color-primary-hover: #287f6e;
-  --color-primary-active: #0a4c3f;
-  --color-primary-highlight: #dcefec;
-  --color-primary-strong: #1f8c7d;
+  /* Primary accent — Action Blue (brand CTA) */
+  --color-primary: #1d63e8;
+  --color-primary-hover: #1652c4;
+  --color-primary-active: #0f3f9e;
+  --color-primary-highlight: #e2ecff;
+  --color-primary-strong: #1d63e8;
 
-  /* Success — synced (Persian Teal family) */
-  --color-success: #287f6e;
-  --color-success-hover: #1d5f52;
-  --color-success-highlight: #d7e0de;
+  /* Success — synced */
+  --color-success: #12a150;
+  --color-success-hover: #0e8341;
+  --color-success-highlight: #e8f7ee;
 
   /* Warning — pending */
-  --color-warning: #a5680a;
-  --color-warning-hover: #855308;
-  --color-warning-highlight: #f0e2c6;
+  --color-warning: #a86a00;
+  --color-warning-hover: #8a5700;
+  --color-warning-highlight: #fff5e0;
 
   /* Error — recording / destructive */
-  --color-error: #c22a3e;
-  --color-error-hover: #9c2132;
-  --color-error-highlight: #f4d7dc;
+  --color-error: #d93838;
+  --color-error-hover: #b42c2c;
+  --color-error-highlight: #fdecec;
 
-  --shadow-sm: 0 1px 2px oklch(0.2 0.03 175 / 0.08);
-  --shadow-md: 0 6px 16px oklch(0.2 0.03 175 / 0.12);
-  --shadow-lg: 0 16px 40px oklch(0.2 0.03 175 / 0.18);
+  --shadow-sm: 0 1px 2px oklch(0.2 0.04 265 / 0.08);
+  --shadow-md: 0 6px 16px oklch(0.2 0.04 265 / 0.12);
+  --shadow-lg: 0 16px 40px oklch(0.2 0.04 265 / 0.18);
 }
 
 /* ============ COLOR — DARK ============ */
-/* Neutral charcoal surfaces so the brand teal reads as a deliberate accent, not a wash */
+/* Dark mode of the Qalcurate platform: neutral graphite surfaces, light Action Blue accent */
 [data-theme='dark'] {
-  --color-bg: #14181a;
-  --color-surface: #1b2023;
-  --color-surface-2: #20262a;
-  --color-surface-offset: #262d31;
-  --color-surface-offset-2: #2e363b;
-  --color-divider: #2a3236;
-  --color-border: #38424a;
+  --color-bg: #202228;
+  --color-surface: #25272e;
+  --color-surface-2: #2a2c34;
+  --color-surface-offset: #2c2f37;
+  --color-surface-offset-2: #363942;
+  --color-divider: #363942;
+  --color-border: #43464f;
 
-  --color-text: #eef1f0;
-  --color-text-muted: #9aa6a3;
-  --color-text-faint: #66716e;
-  --color-text-inverse: #0d1213;
+  --color-text: #eceef3;
+  --color-text-muted: #aab0be;
+  --color-text-faint: #8c93a3;
+  --color-text-inverse: #0b1020;
 
-  --color-primary: #35c2ae;
-  --color-primary-hover: #4ad0bc;
-  --color-primary-active: #2aa792;
-  --color-primary-highlight: #17302c;
-  --color-primary-strong: #3ddbc6;
+  --color-primary: #6ea5ff;
+  --color-primary-hover: #8db8ff;
+  --color-primary-active: #4f8cff;
+  --color-primary-highlight: #2e3852;
+  --color-primary-strong: #8db8ff;
 
-  --color-success: #35c2ae;
-  --color-success-hover: #4ad0bc;
-  --color-success-highlight: #17302c;
+  --color-success: #2bc26b;
+  --color-success-hover: #4fd287;
+  --color-success-highlight: #0f2a1d;
 
-  --color-warning: #f2b84b;
-  --color-warning-hover: #f5c977;
-  --color-warning-highlight: #3a2f1a;
+  --color-warning: #e5a21a;
+  --color-warning-hover: #efb84a;
+  --color-warning-highlight: #2b2210;
 
-  --color-error: #f2536a;
-  --color-error-hover: #f57c8d;
-  --color-error-highlight: #3a1e24;
+  --color-error: #f06464;
+  --color-error-hover: #f48787;
+  --color-error-highlight: #321619;
 
   --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.3);
   --shadow-md: 0 6px 16px oklch(0 0 0 / 0.35);
@@ -171,31 +136,31 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --color-bg: #14181a;
-    --color-surface: #1b2023;
-    --color-surface-2: #20262a;
-    --color-surface-offset: #262d31;
-    --color-surface-offset-2: #2e363b;
-    --color-divider: #2a3236;
-    --color-border: #38424a;
-    --color-text: #eef1f0;
-    --color-text-muted: #9aa6a3;
-    --color-text-faint: #66716e;
-    --color-text-inverse: #0d1213;
-    --color-primary: #35c2ae;
-    --color-primary-hover: #4ad0bc;
-    --color-primary-active: #2aa792;
-    --color-primary-highlight: #17302c;
-    --color-primary-strong: #3ddbc6;
-    --color-success: #35c2ae;
-    --color-success-hover: #4ad0bc;
-    --color-success-highlight: #17302c;
-    --color-warning: #f2b84b;
-    --color-warning-hover: #f5c977;
-    --color-warning-highlight: #3a2f1a;
-    --color-error: #f2536a;
-    --color-error-hover: #f57c8d;
-    --color-error-highlight: #3a1e24;
+    --color-bg: #202228;
+    --color-surface: #25272e;
+    --color-surface-2: #2a2c34;
+    --color-surface-offset: #2c2f37;
+    --color-surface-offset-2: #363942;
+    --color-divider: #363942;
+    --color-border: #43464f;
+    --color-text: #eceef3;
+    --color-text-muted: #aab0be;
+    --color-text-faint: #8c93a3;
+    --color-text-inverse: #0b1020;
+    --color-primary: #6ea5ff;
+    --color-primary-hover: #8db8ff;
+    --color-primary-active: #4f8cff;
+    --color-primary-highlight: #2e3852;
+    --color-primary-strong: #8db8ff;
+    --color-success: #2bc26b;
+    --color-success-hover: #4fd287;
+    --color-success-highlight: #0f2a1d;
+    --color-warning: #e5a21a;
+    --color-warning-hover: #efb84a;
+    --color-warning-highlight: #2b2210;
+    --color-error: #f06464;
+    --color-error-hover: #f48787;
+    --color-error-highlight: #321619;
   }
 }
 
@@ -1085,3 +1050,45 @@ a.sr-only:focus-visible {
   .app-main { padding: var(--space-8) var(--space-8) var(--space-24); }
   .app-header { padding: var(--space-4) var(--space-8); }
 }
+
+/* ============ QALCURATE BRANDING (12/11/2026) ============ */
+/* Header like app.qalcurate.com: navy gradient in both themes, white wordmark, light controls */
+.app-header {
+  background: radial-gradient(60% 140% at 0% 0%, rgba(79, 140, 255, 0.22), transparent 70%), linear-gradient(90deg, #16214a 0%, #0f1733 55%, #0b1020 100%);
+  backdrop-filter: none;
+  border-bottom: 0;
+  color: #ffffff;
+  padding-top: max(var(--space-3), env(safe-area-inset-top));
+  padding-bottom: var(--space-3);
+}
+.app-header .icon-btn { color: rgba(255, 255, 255, 0.86); }
+.app-header .icon-btn:hover { background: rgba(255, 255, 255, 0.1); color: #ffffff; }
+.brand { gap: var(--space-3); }
+.brand-wordmark { height: 22px; width: auto; display: block; }
+.brand-lockup { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1; }
+.brand-lockup .brand-wordmark { height: 24px; }
+.brand-sub {
+  margin-top: 1px;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  margin-right: -0.34em;
+  background: linear-gradient(90deg, #4f8cff, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.app-header .status-chip {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+/* record button: Qalcurate blue-cyan gradient, red while recording */
+.record-btn {
+  background: linear-gradient(135deg, #4f8cff, #22d3ee);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(79, 140, 255, 0.4);
+}
+.record-btn::after { border-color: rgba(79, 140, 255, 0.35); }
+[data-recording='true'] .record-btn { background: var(--color-error); }
+.timer, .record-timer { font-variant-numeric: tabular-nums; }

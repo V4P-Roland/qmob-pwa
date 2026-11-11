@@ -1065,15 +1065,18 @@ a.sr-only:focus-visible {
 .app-header .icon-btn:hover { background: rgba(255, 255, 255, 0.1); color: #ffffff; }
 .brand { gap: var(--space-3); }
 .brand-wordmark { height: 22px; width: auto; display: block; }
-.brand-app {
-  font-size: var(--text-xs);
+.brand-lockup { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1; }
+.brand-lockup .brand-wordmark { height: 24px; }
+.brand-sub {
+  margin-top: 1px;
+  font-size: 8.5px;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #ffffff;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  letter-spacing: 0.34em;
+  margin-right: -0.34em;
+  background: linear-gradient(90deg, #4f8cff, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .app-header .status-chip {
   background: rgba(255, 255, 255, 0.1);

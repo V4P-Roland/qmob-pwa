@@ -1,6 +1,6 @@
 {
-  "name": "qmob · Qalcurate — Gespräche aufnehmen & transkribieren",
-  "short_name": "qmob",
+  "name": "Qalcurate MOBILE — Gespräche aufnehmen & transkribieren",
+  "short_name": "Qalcurate MOBILE",
   "description": "Zeichnet Gespräche auf, transkribiert sie live im Browser und übermittelt sie automatisch per Webhook — auch nach einer Offline-Phase.",
   "start_url": "./index.html",
   "scope": "./",

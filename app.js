@@ -128,8 +128,28 @@ const I18N = {
     queueHeading: 'Warteschlange',
     pendingRecordings: 'Ausstehende Aufnahmen',
     connectionStatus: 'Verbindungsstatus',
-    aboutHeading: 'Über qmob',
-    aboutText: 'qmob ist die mobile App von Qalcurate, eine installierbare Web-App (PWA). Füge sie über das Browser-Menü „Zum Startbildschirm hinzufügen“ deinem Homescreen hinzu, um sie wie eine native App zu nutzen. Version 1.0.',
+    aboutHeading: 'Über Qalcurate MOBILE',
+    aboutText: 'Qalcurate MOBILE ist die mobile App von Qalcurate. Du nimmst Gespräche auf, siehst das Transkript live und gibst die Aufnahme auf Wunsch an einen Qalvy-Agenten weiter.',
+    aboutMore: 'Über Qalcurate MOBILE und Qalcurate',
+    versionLabel: 'Version',
+    localDataHeading: 'Lokale Daten',
+    localDataHint: 'Entfernt alle Aufnahmen und Einstellungen von diesem Gerät. Bereits an Qalvy übergebene Chats bleiben erhalten.',
+    localDataDelete: 'Lokale Daten löschen',
+    localDataConfirm: 'Wirklich alle Aufnahmen und Einstellungen löschen?',
+    localDataDeleted: 'Lokale Daten gelöscht.',
+    localDataBusy: 'Bitte zuerst die Aufnahme beenden.',
+    menuInfo: 'Info und Hilfe',
+    menuHelp: 'Hilfe',
+    menuAbout: 'Über Qalcurate MOBILE',
+    menuContact: 'Kontakt und Feedback',
+    menuLegal: 'Rechtliches',
+    menuImprint: 'Impressum',
+    menuPrivacy: 'Datenschutz',
+    menuTerms: 'Nutzungsbedingungen',
+    back: 'Zurück',
+    feedbackEmpty: 'Bitte schreib eine Nachricht.',
+    feedbackSubject: 'Qalcurate MOBILE',
+    feedbackTech: 'Technische Angaben',
     agentComingSoonSubtitle: 'Diese Funktion ist in Vorbereitung.',
     voiceAgentEmpty: 'Voice Agent ist bald verfügbar.',
     videoAgentEmpty: 'Video Agent ist bald verfügbar.',
@@ -231,8 +251,28 @@ const I18N = {
     queueHeading: 'Queue',
     pendingRecordings: 'Pending recordings',
     connectionStatus: 'Connection status',
-    aboutHeading: 'About qmob',
-    aboutText: 'qmob is the Qalcurate mobile app, an installable web app (PWA). Add it to your home screen via the browser menu “Add to home screen” to use it like a native app. Version 1.0.',
+    aboutHeading: 'About Qalcurate MOBILE',
+    aboutText: 'Qalcurate MOBILE is the mobile app of Qalcurate. Record conversations, see the transcript live and, if you like, hand the recording to a Qalvy agent.',
+    aboutMore: 'About Qalcurate MOBILE and Qalcurate',
+    versionLabel: 'Version',
+    localDataHeading: 'Local data',
+    localDataHint: 'Removes all recordings and settings from this device. Chats already handed to Qalvy are kept.',
+    localDataDelete: 'Delete local data',
+    localDataConfirm: 'Really delete all recordings and settings?',
+    localDataDeleted: 'Local data deleted.',
+    localDataBusy: 'Please stop the recording first.',
+    menuInfo: 'Info and help',
+    menuHelp: 'Help',
+    menuAbout: 'About Qalcurate MOBILE',
+    menuContact: 'Contact and feedback',
+    menuLegal: 'Legal',
+    menuImprint: 'Imprint',
+    menuPrivacy: 'Privacy',
+    menuTerms: 'Terms of use',
+    back: 'Back',
+    feedbackEmpty: 'Please write a message.',
+    feedbackSubject: 'Qalcurate MOBILE',
+    feedbackTech: 'Technical details',
     agentComingSoonSubtitle: 'This feature is coming soon.',
     voiceAgentEmpty: 'Voice Agent will be available soon.',
     videoAgentEmpty: 'Video Agent will be available soon.',
@@ -310,6 +350,7 @@ function applyTranslations() {
   if (currentAsrBannerKey) els.asrBannerText.textContent = t(currentAsrBannerKey);
   updatePendingUI();
   renderHistory();
+  if (typeof renderDoc === 'function' && activeGlobalView === 'doc') renderDoc();
 }
 
 els.uiLangToggle.addEventListener('click', async () => {
@@ -354,14 +395,14 @@ function switchView(name, { fromSideMenu = false } = {}) {
   if (TRANSKRIPT_VIEWS.includes(name)) {
     activeTranskriptView = name;
     currentModule = 'transkript';
-  } else {
+  } else if (name !== 'doc') {
     currentModule = name; // 'voice-agent' | 'video-agent'
   }
 
   els.views.forEach((v) => v.classList.toggle('is-active', v.dataset.view === name));
   els.navBtns.forEach((b) => b.classList.toggle('is-active', b.dataset.nav === name));
   els.sideMenuItems.forEach((b) => b.classList.toggle('is-active', b.dataset.module === currentModule));
-  els.bottomNav.hidden = currentModule !== 'transkript';
+  els.bottomNav.hidden = currentModule !== 'transkript' || name === 'doc';
 
   if (name === 'history') renderHistory();
   if (fromSideMenu) closeSideMenu();
@@ -392,6 +433,7 @@ els.sideMenuClose.addEventListener('click', closeSideMenu);
 els.sideMenuBackdrop.addEventListener('click', closeSideMenu);
 els.sideMenuItems.forEach((btn) => {
   btn.addEventListener('click', () => {
+    if (btn.dataset.doc) return; // handled by openDoc (help, about, contact, legal)
     const mod = btn.dataset.module;
     if (mod === 'transkript') switchView(activeTranskriptView, { fromSideMenu: true });
     else switchView(mod, { fromSideMenu: true });
@@ -1260,6 +1302,101 @@ els.langSelect.addEventListener('change', async () => {
   await dbSetSetting('language', currentLanguage);
   showToast(t('toastLangSaved'));
 });
+
+/* ==========================================================================
+   Help, about, contact and legal pages (12/11/2026) — texts in docs.js
+   ========================================================================== */
+let currentDoc = null;
+let docReturnView = 'recorder';
+
+function renderDoc() {
+  if (!currentDoc) return;
+  const set = DOCS[currentUiLang] || DOCS.de;
+  const d = set[currentDoc] || DOCS.de[currentDoc];
+  $('#docTitle').textContent = d.title;
+  $('#docBody').innerHTML = d.html();
+  // Label table cells so tables can be shown as stacked cards on small screens.
+  $('#docBody').querySelectorAll('table').forEach((tbl) => {
+    const heads = [...tbl.querySelectorAll('thead th')].map((th) => th.textContent);
+    tbl.querySelectorAll('tbody tr').forEach((tr) => {
+      [...tr.children].forEach((td, i) => { if (heads[i]) td.dataset.label = heads[i]; });
+    });
+  });
+  if (currentDoc === 'contact') wireFeedbackForm();
+}
+
+function openDoc(key, { fromSideMenu = false } = {}) {
+  if (isRecording) { showToast(t('localDataBusy')); if (fromSideMenu) closeSideMenu(); return; }
+  if (activeGlobalView !== 'doc') docReturnView = activeGlobalView;
+  currentDoc = key;
+  renderDoc();
+  switchView('doc', { fromSideMenu });
+  els.sideMenuItems.forEach((b) => b.classList.toggle('is-active', b.dataset.doc === key));
+  document.querySelectorAll('.side-menu-legal-link').forEach((b) => b.classList.toggle('is-active', b.dataset.doc === key));
+  window.scrollTo(0, 0);
+}
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-doc], [data-doc-link]');
+  if (!el) return;
+  e.preventDefault();
+  const fromSideMenu = !!el.closest('#sideMenu');
+  openDoc(el.dataset.doc || el.dataset.docLink, { fromSideMenu });
+});
+
+$('#docBack').addEventListener('click', () => {
+  currentDoc = null;
+  document.querySelectorAll('.side-menu-legal-link').forEach((b) => b.classList.remove('is-active'));
+  switchView(docReturnView || 'recorder');
+});
+
+function techDetails() {
+  const ua = navigator.userAgent;
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  return [
+    `App: Qalcurate MOBILE ${APP_VERSION}`,
+    `UI: ${currentUiLang} · ASR: ${currentLanguage || '-'}`,
+    `Home screen app: ${standalone ? 'yes' : 'no'}`,
+    `Screen: ${window.screen.width}x${window.screen.height} @${window.devicePixelRatio}`,
+    `User agent: ${ua}`,
+  ].join('\n');
+}
+
+function wireFeedbackForm() {
+  const form = $('#feedbackForm');
+  if (!form) return;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = $('#fbText').value.trim();
+    if (!text) { showToast(t('feedbackEmpty')); $('#fbText').focus(); return; }
+    const type = $('#fbType').value;
+    let body = text;
+    if ($('#fbTech').checked) body += `\n\n-- ${t('feedbackTech')} --\n${techDetails()}`;
+    const subject = `${t('feedbackSubject')}: ${type}`;
+    window.location.href = `mailto:${PROVIDER.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+}
+
+/* Delete all local data: recordings and settings in IndexedDB, plus the offline cache. */
+$('#wipeLocalBtn').addEventListener('click', async () => {
+  if (isRecording) { showToast(t('localDataBusy')); return; }
+  if (!window.confirm(t('localDataConfirm'))) return;
+  try {
+    const db = await getDB();
+    db.close();
+  } catch (e) { /* ignore */ }
+  try {
+    await new Promise((resolve) => {
+      const req = indexedDB.deleteDatabase(DB_NAME);
+      req.onsuccess = req.onerror = req.onblocked = () => resolve();
+    });
+    if (window.caches) { const keys = await caches.keys(); await Promise.all(keys.map((k) => caches.delete(k))); }
+  } catch (e) { /* ignore */ }
+  showToast(t('localDataDeleted'));
+  setTimeout(() => window.location.reload(), 900);
+});
+
+$('#appVersionVal').textContent = APP_VERSION;
 
 /* ==========================================================================
    Service worker

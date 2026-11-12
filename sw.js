@@ -3,13 +3,14 @@
 /* Qalcurate service worker — caches the app shell so the UI itself loads
    offline. Recording data lives in IndexedDB (handled in app.js), not here. */
 
-const CACHE_NAME = 'qalcurate-shell-v7';
+const CACHE_NAME = 'qalcurate-shell-v8';
 const CORE_ASSETS = [
   './',
   './index.html',
   './base.css',
   './style.css',
   './app.js',
+  './docs.js',
   './manifest.json',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',

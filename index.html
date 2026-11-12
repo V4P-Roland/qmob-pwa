@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>qmob · Qalcurate — Gespräche aufnehmen &amp; transkribieren</title>
-<meta name="description" content="qmob zeichnet Gespräche auf, transkribiert sie live im Browser und übermittelt sie automatisch per Webhook — auch wenn du zwischenzeitlich offline warst." />
+<title>Qalcurate MOBILE — Gespräche aufnehmen &amp; transkribieren</title>
+<meta name="description" content="Qalcurate MOBILE zeichnet Gespräche auf, transkribiert sie live im Browser und übermittelt sie automatisch per Webhook — auch wenn du zwischenzeitlich offline warst." />
 
 <meta name="theme-color" content="#0b1020" />
 <link rel="manifest" href="./manifest.json" />
@@ -13,15 +13,12 @@
 <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="qmob" />
+<meta name="apple-mobile-web-app-title" content="Qalcurate MOBILE" />
 
-<meta property="og:title" content="qmob · Qalcurate — Gespräche aufnehmen & transkribieren" />
+<meta property="og:title" content="Qalcurate MOBILE — Gespräche aufnehmen & transkribieren" />
 <meta property="og:description" content="Aufnahme, Live-Transkription und automatische Übermittlung per Webhook — auch offline." />
 <meta property="og:type" content="website" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
 <!-- Inter (Qalcurate brand font) is self-hosted via @font-face in style.css -->
 <link rel="preload" href="./assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
 
@@ -79,6 +76,26 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m23 7-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
         Video Agent
       </button>
+    </nav>
+    <div class="side-menu-group-label" data-i18n="menuInfo">Info und Hilfe</div>
+    <nav class="side-menu-list" aria-label="Info und Hilfe" data-i18n-aria-label="menuInfo">
+      <button class="side-menu-item" data-doc="help" data-testid="menu-item-help">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>
+        <span data-i18n="menuHelp">Hilfe</span>
+      </button>
+      <button class="side-menu-item" data-doc="about" data-testid="menu-item-about">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span data-i18n="menuAbout">Über Qalcurate MOBILE</span>
+      </button>
+      <button class="side-menu-item" data-doc="contact" data-testid="menu-item-contact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span data-i18n="menuContact">Kontakt und Feedback</span>
+      </button>
+    </nav>
+    <nav class="side-menu-legal" aria-label="Rechtliches" data-i18n-aria-label="menuLegal">
+      <button class="side-menu-legal-link" data-doc="imprint" data-i18n="menuImprint" data-testid="menu-item-imprint">Impressum</button>
+      <button class="side-menu-legal-link" data-doc="privacy" data-i18n="menuPrivacy" data-testid="menu-item-privacy">Datenschutz</button>
+      <button class="side-menu-legal-link" data-doc="terms" data-i18n="menuTerms" data-testid="menu-item-terms">Nutzungsbedingungen</button>
     </nav>
     <div class="side-menu-footer">
       <button class="side-menu-theme-btn" id="themeToggle" data-theme-toggle aria-label="Zu dunklem Modus wechseln" data-testid="button-theme-toggle">
@@ -223,8 +240,28 @@
       </div>
 
       <div class="settings-section">
-        <h2 data-i18n="aboutHeading">Über qmob</h2>
-        <p class="about-text" data-i18n="aboutText">qmob ist die mobile App von Qalcurate, eine installierbare Web-App (PWA). Füge sie über das Browser-Menü „Zum Startbildschirm hinzufügen“ deinem Homescreen hinzu, um sie wie eine native App zu nutzen. Version 1.0.</p>
+        <h2 data-i18n="localDataHeading">Lokale Daten</h2>
+        <p class="field-hint" data-i18n="localDataHint">Entfernt alle Aufnahmen und Einstellungen von diesem Gerät. Bereits an Qalvy übergebene Chats bleiben erhalten.</p>
+        <div class="btn-row">
+          <button class="btn btn-danger" id="wipeLocalBtn" data-i18n="localDataDelete" data-testid="button-wipe-local">Lokale Daten löschen</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h2 data-i18n="aboutHeading">Über Qalcurate MOBILE</h2>
+        <p class="about-text" data-i18n="aboutText">Qalcurate MOBILE ist die mobile App von Qalcurate.</p>
+        <div class="settings-row">
+          <span data-i18n="versionLabel">Version</span>
+          <span class="val" id="appVersionVal">–</span>
+        </div>
+        <div class="settings-links">
+          <button class="link-row" data-doc="about" data-testid="settings-link-about"><span data-i18n="aboutMore">Über Qalcurate MOBILE und Qalcurate</span><span aria-hidden="true">›</span></button>
+          <button class="link-row" data-doc="help" data-testid="settings-link-help"><span data-i18n="menuHelp">Hilfe</span><span aria-hidden="true">›</span></button>
+          <button class="link-row" data-doc="contact" data-testid="settings-link-contact"><span data-i18n="menuContact">Kontakt und Feedback</span><span aria-hidden="true">›</span></button>
+          <button class="link-row" data-doc="imprint" data-testid="settings-link-imprint"><span data-i18n="menuImprint">Impressum</span><span aria-hidden="true">›</span></button>
+          <button class="link-row" data-doc="privacy" data-testid="settings-link-privacy"><span data-i18n="menuPrivacy">Datenschutz</span><span aria-hidden="true">›</span></button>
+          <button class="link-row" data-doc="terms" data-testid="settings-link-terms"><span data-i18n="menuTerms">Nutzungsbedingungen</span><span aria-hidden="true">›</span></button>
+        </div>
       </div>
     </section>
 
@@ -252,6 +289,17 @@
       </div>
     </section>
 
+    <!-- ---------- DOC VIEW: help, about, contact, legal (12/11/2026) ---------- -->
+    <section class="view" id="view-doc" data-view="doc" aria-labelledby="docTitle">
+      <div class="doc-head">
+        <button class="icon-btn doc-back" id="docBack" aria-label="Zurück" data-i18n-aria-label="back" data-testid="button-doc-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <h1 class="page-title" id="docTitle">–</h1>
+      </div>
+      <article class="doc-body" id="docBody"></article>
+    </section>
+
   </main>
 
   <!-- ============ TOASTS ============ -->
@@ -276,6 +324,7 @@
 
 </div>
 
+<script src="./docs.js"></script>
 <script src="./app.js"></script>
 </body>
 </html>

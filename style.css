@@ -688,6 +688,23 @@ a.sr-only:focus-visible {
   margin-top: 2px;
 }
 .banner[hidden] { display: none; }
+.banner-resume {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+.banner-resume svg { color: var(--color-primary-strong); }
+.banner-body { display: flex; flex-direction: column; gap: var(--space-3); flex: 1; }
+.banner-actions { justify-content: flex-end; flex-wrap: wrap; }
+.record-stay-hint {
+  display: none;
+  text-align: center;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-warning);
+  margin-top: calc(-1 * var(--space-2));
+}
+[data-recording='true'] .record-stay-hint { display: block; }
 
 .toast-stack {
   position: fixed;

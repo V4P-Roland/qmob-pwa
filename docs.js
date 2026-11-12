@@ -4,7 +4,7 @@
    German is the binding version of the legal texts; English is a courtesy translation.
    Rendered into #view-doc by app.js (openDoc). Plain HTML strings, no external requests. */
 
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.1.1';
 const DOCS_AS_OF = { de: '12.11.2026', en: '12 November 2026' };
 
 const PROVIDER = {
@@ -38,7 +38,7 @@ const DOCS = {
 
 <details class="doc-acc" open><summary>Auf dem iPhone einrichten</summary>
 <ol>
-<li>Öffne <strong>qmob.qalcurate.com</strong> in <strong>Safari</strong>.</li>
+<li>Öffne <strong>mobile.qalcurate.com</strong> in <strong>Safari</strong>.</li>
 <li>Tippe unten auf das <strong>Teilen-Symbol</strong> (Quadrat mit Pfeil nach oben).</li>
 <li>Wähle <strong>„Zum Home-Bildschirm“</strong> und tippe auf <strong>„Hinzufügen“</strong>.</li>
 <li>Starte die App ab jetzt immer über das Symbol auf dem Home-Bildschirm. Nur so bleibt der Bildschirm während einer Aufnahme an.</li>
@@ -49,7 +49,7 @@ const DOCS = {
 
 <details class="doc-acc"><summary>Auf Android einrichten</summary>
 <ol>
-<li>Öffne <strong>qmob.qalcurate.com</strong> in <strong>Chrome</strong>.</li>
+<li>Öffne <strong>mobile.qalcurate.com</strong> in <strong>Chrome</strong>.</li>
 <li>Tippe oben rechts auf das <strong>Menü (⋮)</strong>.</li>
 <li>Wähle <strong>„App installieren“</strong> oder <strong>„Zum Startbildschirm hinzufügen“</strong>.</li>
 <li>Starte die App über das neue Symbol und erlaube den Zugriff auf das Mikrofon.</li>
@@ -100,6 +100,7 @@ const DOCS = {
 <ul>
 <li><strong>Kein Transkript:</strong> Prüfe in den iPhone-Einstellungen unter <strong>Allgemein › Tastatur</strong>, ob die <strong>Diktierfunktion</strong> eingeschaltet ist, und ob Du online bist.</li>
 <li><strong>„Verbindung testen“ schlägt fehl:</strong> Prüfe, ob die Webhook-Adresse vollständig eingefügt ist. Die Verbindung in Qalcurate muss noch bestehen.</li>
+<li><strong>App unter alter Adresse installiert:</strong> Qalcurate MOBILE ist jetzt unter <strong>mobile.qalcurate.com</strong> erreichbar. Entferne das alte Symbol vom Home-Bildschirm, füge die App über die neue Adresse neu hinzu und trage die Webhook-Adresse erneut ein.</li>
 <li><strong>Kein Mikrofon:</strong> Erlaube den Zugriff wie unter „Auf dem iPhone einrichten“ beschrieben.</li>
 <li>Hilft das nicht weiter, schreib uns über ${docLink('contact', 'Kontakt und Feedback')}.</li>
 </ul>
@@ -199,7 +200,7 @@ ${asOf('de')}`,
     privacy: {
       title: 'Datenschutzhinweis',
       html: () => `
-<p>Dieser Hinweis erklärt, welche personenbezogenen Daten bei der Nutzung von Qalcurate MOBILE unter qmob.qalcurate.com verarbeitet werden. Für die Qalcurate-Plattform und Qalvy gilt zusätzlich deren eigener <a href="https://app.qalcurate.com/legal/datenschutz.html" target="_blank" rel="noopener">Datenschutzhinweis</a>.</p>
+<p>Dieser Hinweis erklärt, welche personenbezogenen Daten bei der Nutzung von Qalcurate MOBILE unter mobile.qalcurate.com verarbeitet werden. Für die Qalcurate-Plattform und Qalvy gilt zusätzlich deren eigener <a href="https://app.qalcurate.com/legal/datenschutz.html" target="_blank" rel="noopener">Datenschutzhinweis</a>.</p>
 
 <h2>1. Verantwortlicher</h2>
 <p>${PROVIDER.name}, ${PROVIDER.street}, ${PROVIDER.city}, vertreten durch ${PROVIDER.rep}<br>E-Mail: <a href="mailto:${PROVIDER.email}">${PROVIDER.email}</a> · Telefon: ${PROVIDER.phone}</p>
@@ -258,7 +259,7 @@ ${asOf('de')}`,
       title: 'Nutzungsbedingungen',
       html: () => `
 <h2>1. Anbieter und Geltung</h2>
-<p>Qalcurate MOBILE wird von der ${PROVIDER.name}, ${PROVIDER.street}, ${PROVIDER.city} (${docLink('imprint', 'Impressum')}), angeboten. Diese Bedingungen gelten für die Nutzung der App unter qmob.qalcurate.com. Für die Qalcurate-Plattform und Qalvy gelten deren eigene Bedingungen.</p>
+<p>Qalcurate MOBILE wird von der ${PROVIDER.name}, ${PROVIDER.street}, ${PROVIDER.city} (${docLink('imprint', 'Impressum')}), angeboten. Diese Bedingungen gelten für die Nutzung der App unter mobile.qalcurate.com. Für die Qalcurate-Plattform und Qalvy gelten deren eigene Bedingungen.</p>
 
 <h2>2. Leistung</h2>
 <p>Die App ist kostenlos. Mit ihr kannst Du Gespräche aufnehmen, live transkribieren lassen und, wenn Du eine Verbindung einrichtest, an Deinen Qalvy-Agenten übergeben. Wir entwickeln die App weiter und können Funktionen ändern oder einstellen. Einen Anspruch auf ständige Verfügbarkeit gibt es nicht.</p>
@@ -292,7 +293,7 @@ ${asOf('de')}`,
 
 <details class="doc-acc" open><summary>Set up on iPhone</summary>
 <ol>
-<li>Open <strong>qmob.qalcurate.com</strong> in <strong>Safari</strong>.</li>
+<li>Open <strong>mobile.qalcurate.com</strong> in <strong>Safari</strong>.</li>
 <li>Tap the <strong>Share icon</strong> (square with an arrow pointing up).</li>
 <li>Choose <strong>“Add to Home Screen”</strong> and tap <strong>“Add”</strong>.</li>
 <li>From now on, always start the app from the icon on your Home Screen. Only then does the screen stay on while recording.</li>
@@ -303,7 +304,7 @@ ${asOf('de')}`,
 
 <details class="doc-acc"><summary>Set up on Android</summary>
 <ol>
-<li>Open <strong>qmob.qalcurate.com</strong> in <strong>Chrome</strong>.</li>
+<li>Open <strong>mobile.qalcurate.com</strong> in <strong>Chrome</strong>.</li>
 <li>Tap the <strong>menu (⋮)</strong> at the top right.</li>
 <li>Choose <strong>“Install app”</strong> or <strong>“Add to Home screen”</strong>.</li>
 <li>Start the app from the new icon and allow access to the microphone.</li>
@@ -354,6 +355,7 @@ ${asOf('de')}`,
 <ul>
 <li><strong>No transcript:</strong> In the iPhone Settings under <strong>General › Keyboard</strong>, check that <strong>Dictation</strong> is on, and check that you are online.</li>
 <li><strong>“Test connection” fails:</strong> Check that the webhook address was pasted completely and that the connection in Qalcurate still exists.</li>
+<li><strong>App installed from the old address:</strong> Qalcurate MOBILE now lives at <strong>mobile.qalcurate.com</strong>. Remove the old icon from your Home Screen, add the app again from the new address and enter the webhook address again.</li>
 <li><strong>No microphone:</strong> Allow access as described under “Set up on iPhone”.</li>
 <li>Still stuck? Write to us via ${docLink('contact', 'Contact and feedback')}.</li>
 </ul>
@@ -451,7 +453,7 @@ ${asOf('en')}`,
       title: 'Privacy notice',
       html: () => `
 ${enNote}
-<p>This notice explains which personal data are processed when you use Qalcurate MOBILE at qmob.qalcurate.com. For the Qalcurate platform and Qalvy, their own <a href="https://app.qalcurate.com/legal/privacy.html" target="_blank" rel="noopener">privacy notice</a> also applies.</p>
+<p>This notice explains which personal data are processed when you use Qalcurate MOBILE at mobile.qalcurate.com. For the Qalcurate platform and Qalvy, their own <a href="https://app.qalcurate.com/legal/privacy.html" target="_blank" rel="noopener">privacy notice</a> also applies.</p>
 
 <h2>1. Controller</h2>
 <p>${PROVIDER.name}, ${PROVIDER.street}, ${PROVIDER.city}, ${PROVIDER.country.en}, represented by ${PROVIDER.rep}<br>Email: <a href="mailto:${PROVIDER.email}">${PROVIDER.email}</a> · Phone: ${PROVIDER.phone}</p>
@@ -510,7 +512,7 @@ ${asOf('en')}`,
       html: () => `
 ${enNote}
 <h2>1. Provider and scope</h2>
-<p>Qalcurate MOBILE is provided by ${PROVIDER.name}, ${PROVIDER.street}, ${PROVIDER.city}, ${PROVIDER.country.en} (${docLink('imprint', 'Imprint')}). These terms apply to the use of the app at qmob.qalcurate.com. The Qalcurate platform and Qalvy have their own terms.</p>
+<p>Qalcurate MOBILE is provided by ${PROVIDER.name}, ${PROVIDER.street}, ${PROVIDER.city}, ${PROVIDER.country.en} (${docLink('imprint', 'Imprint')}). These terms apply to the use of the app at mobile.qalcurate.com. The Qalcurate platform and Qalvy have their own terms.</p>
 
 <h2>2. Service</h2>
 <p>The app is free of charge. You can record conversations, have them transcribed live and, if you set up a connection, hand them to your Qalvy agent. We keep developing the app and may change or discontinue features. There is no entitlement to constant availability.</p>

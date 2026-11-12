@@ -7,7 +7,7 @@ COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /usr/share/nginx/html
 
-COPY index.html base.css style.css app.js sw.js manifest.json ./
+COPY index.html base.css style.css app.js docs.js sw.js manifest.json ./
 COPY assets/ ./assets/
 
 EXPOSE 80

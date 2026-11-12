@@ -90,6 +90,14 @@ const I18N = {
     recordStopAria: 'Aufnahme beenden',
     recordHintStart: 'Tippen, um die Aufnahme zu starten',
     recordHintStop: 'Tippen, um die Aufnahme zu beenden',
+    consentTitle: 'Zustimmung zur Aufnahme',
+    consentText: 'Alle Personen, die an dem Gespräch teilnehmen, müssen der Aufnahme zustimmen, bevor sie beginnt.',
+    consentCheck: 'Alle Beteiligten haben der Aufnahme zugestimmt.',
+    consentStart: 'Aufnahme starten',
+    cancel: 'Abbrechen',
+    toastSilenceStop: 'Aufnahme nach 10 Sekunden Stille beendet.',
+    toastInterrupted: 'Aufnahme unterbrochen, weil das Gerät gesperrt oder die App verlassen wurde. Das Bisherige ist gespeichert.',
+    toastWakeLockUnavailable: 'Der Bildschirm kann nicht wach gehalten werden. Bitte das Gerät während der Aufnahme nicht sperren.',
     transcriptLabel: 'Transkript',
     transcriptPlaceholder: 'Das Transkript erscheint hier während der Aufnahme…',
     historyTitle: 'Verlauf',
@@ -185,6 +193,14 @@ const I18N = {
     recordStopAria: 'Stop recording',
     recordHintStart: 'Tap to start recording',
     recordHintStop: 'Tap to stop recording',
+    consentTitle: 'Consent to recording',
+    consentText: 'Everyone taking part in the conversation must agree to the recording before it starts.',
+    consentCheck: 'Everyone taking part has agreed to the recording.',
+    consentStart: 'Start recording',
+    cancel: 'Cancel',
+    toastSilenceStop: 'Recording stopped after 10 seconds of silence.',
+    toastInterrupted: 'Recording interrupted because the device was locked or the app was left. Everything up to that point is saved.',
+    toastWakeLockUnavailable: 'The screen cannot be kept awake. Please do not lock the device while recording.',
     transcriptLabel: 'Transcript',
     transcriptPlaceholder: 'The transcript appears here while recording…',
     historyTitle: 'History',
@@ -551,7 +567,8 @@ async function syncOne(rec, webhookUrlParam) {
   try {
     const fd = new FormData();
     fd.append('id', rec.id);
-    fd.append('title', rec.title);
+    fd.append('title', rec.recordingTitle != null ? rec.recordingTitle : rec.title);
+    fd.append('startedAt', rec.startedAt || rec.createdAt);
     fd.append('createdAt', rec.createdAt);
     fd.append('durationSec', String(rec.durationSec));
     fd.append('transcript', rec.transcript || '');
@@ -667,6 +684,64 @@ let audioCtx = null;
 let analyser = null;
 let sourceNode = null;
 let rafId = null;
+
+/* 12/11/2026: keep the screen awake while recording (iOS Home Screen apps from iOS 18.4) and stop after
+   10 s of silence. iOS ends microphone capture when the device locks; what was recorded so far is saved. */
+const SILENCE_STOP_MS = 10000;
+const SILENCE_MIN_DB = -45;   // same threshold as Qalvy's voice input
+let wakeLock = null;
+let silenceTimer = null;
+let lastSoundMs = 0;
+let recordingStartedAt = null;
+let stopReason = null;
+
+async function acquireWakeLock() {
+  if (!('wakeLock' in navigator)) { showToast(t('toastWakeLockUnavailable')); return; }
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release', () => { wakeLock = null; });
+  } catch (e) {
+    showToast(t('toastWakeLockUnavailable'));
+  }
+}
+function releaseWakeLock() {
+  if (wakeLock) wakeLock.release().catch(() => {});
+  wakeLock = null;
+}
+const IS_IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && isRecording && !wakeLock) acquireWakeLock();
+  // iOS ends microphone capture as soon as the app is hidden or the device locks: save what we have right away
+  if (document.visibilityState === 'hidden' && isRecording && IS_IOS) { stopReason = 'interrupted'; stopRecording(); }
+});
+
+function startSilenceWatch() {
+  if (!analyser) return;
+  analyser.minDecibels = SILENCE_MIN_DB;
+  const data = new Uint8Array(analyser.frequencyBinCount);
+  lastSoundMs = Date.now();
+  silenceTimer = setInterval(() => {
+    if (!isRecording || !analyser) return;
+    analyser.getByteFrequencyData(data);
+    if (data.some((v) => v > 0)) lastSoundMs = Date.now();
+    else if (Date.now() - lastSoundMs > SILENCE_STOP_MS) { stopReason = 'silence'; stopRecording(); }
+  }, 200);
+}
+function stopSilenceWatch() {
+  clearInterval(silenceTimer);
+  silenceTimer = null;
+}
+
+function askConsent() {
+  return new Promise((resolve) => {
+    const dlg = $('#consentDialog'), box = $('#consentCheck'), ok = $('#consentStart'), no = $('#consentCancel');
+    box.checked = false; ok.disabled = true; dlg.hidden = false;
+    const done = (v) => { dlg.hidden = true; box.onchange = ok.onclick = no.onclick = null; resolve(v); };
+    box.onchange = () => { ok.disabled = !box.checked; };
+    ok.onclick = () => done(true);
+    no.onclick = () => done(false);
+  });
+}
 
 let recognition = null;
 let recognitionShouldRestart = false;
@@ -863,6 +938,7 @@ function resetRecorderUIAfterSave() {
 }
 
 async function startRecording() {
+  if (!(await askConsent())) return;
   try {
     mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
   } catch (err) {
@@ -890,7 +966,12 @@ async function startRecording() {
     if (e.data && e.data.size > 0) chunks.push(e.data);
   };
   mediaRecorder.onstop = onRecorderStop;
-  mediaRecorder.start();
+  mediaRecorder.start(1000);   // chunks every second, so an interruption keeps what was recorded
+  mediaStream.getAudioTracks().forEach((track) => {
+    track.addEventListener('ended', () => { if (isRecording) { stopReason = 'interrupted'; stopRecording(); } });
+  });
+  recordingStartedAt = new Date().toISOString();
+  stopReason = null;
 
   isRecording = true;
   els.appShell.classList.add('is-recording');
@@ -913,6 +994,8 @@ async function startRecording() {
   }, 250);
 
   startWaveform(mediaStream);
+  startSilenceWatch();
+  acquireWakeLock();
   startRecognition();
 }
 
@@ -926,6 +1009,8 @@ function stopRecording() {
   els.waveformIdleLabel.style.display = '';
 
   clearInterval(timerInterval);
+  stopSilenceWatch();
+  releaseWakeLock();
   stopWaveform();
   stopRecognition();
 
@@ -956,13 +1041,18 @@ async function onRecorderStop() {
     resetRecorderUI();
     return;
   }
+  const reason = stopReason; stopReason = null;
   await saveRecording(blob, mimeType, elapsedSeconds, finalTranscript.trim());
+  if (reason === 'silence') showToast(t('toastSilenceStop'));
+  else if (reason === 'interrupted') showToast(t('toastInterrupted'));
 }
 
 async function saveRecording(blob, mimeType, durationSec, transcript) {
   const rec = {
     id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)),
     title: els.titleInput.value.trim() || defaultTitle(),
+    recordingTitle: els.titleInput.value.trim(),   // only what the user typed; empty = no title
+    startedAt: recordingStartedAt || new Date().toISOString(),
     createdAt: new Date().toISOString(),
     durationSec,
     transcript,

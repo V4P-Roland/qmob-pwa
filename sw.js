@@ -3,7 +3,7 @@
 /* Qalcurate service worker — caches the app shell so the UI itself loads
    offline. Recording data lives in IndexedDB (handled in app.js), not here. */
 
-const CACHE_NAME = 'qalcurate-shell-v5';
+const CACHE_NAME = 'qalcurate-shell-v6';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -17,6 +17,7 @@ const CORE_ASSETS = [
   './assets/icons/apple-touch-icon.png',
   './assets/icons/favicon-32.png',
   './assets/brand/qalcurate-logo-white.svg',
+  './assets/brand/qalcurate-mobile-dark.png',
   './assets/brand/favicon.svg',
   './assets/fonts/InterVariable.woff2',
 ];

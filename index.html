@@ -42,8 +42,7 @@
       </button>
       <div class="brand">
         <span class="brand-lockup" role="img" aria-label="Qalcurate Mobile">
-          <img class="brand-wordmark" src="./assets/brand/qalcurate-logo-white.svg" alt="" height="24" />
-          <span class="brand-sub" aria-hidden="true">MOBILE</span>
+          <img class="brand-lockup-img" src="./assets/brand/qalcurate-mobile-dark.png" alt="" height="32" />
         </span>
       </div>
     </div>
@@ -90,6 +89,22 @@
       </button>
     </div>
   </aside>
+
+  <!-- ============ CONSENT DIALOG (12/11/2026) ============ -->
+  <div class="consent-backdrop" id="consentDialog" hidden>
+    <div class="consent-sheet" role="dialog" aria-modal="true" aria-labelledby="consentTitle" aria-describedby="consentText">
+      <h2 class="consent-title" id="consentTitle" data-i18n="consentTitle">Zustimmung zur Aufnahme</h2>
+      <p class="consent-text" id="consentText" data-i18n="consentText">Alle Personen, die an dem Gespräch teilnehmen, müssen der Aufnahme zustimmen, bevor sie beginnt.</p>
+      <label class="consent-check">
+        <input type="checkbox" id="consentCheck" data-testid="checkbox-consent" />
+        <span data-i18n="consentCheck">Alle Beteiligten haben der Aufnahme zugestimmt.</span>
+      </label>
+      <div class="btn-row consent-actions">
+        <button class="btn btn-secondary" id="consentCancel" data-i18n="cancel" data-testid="button-consent-cancel">Abbrechen</button>
+        <button class="btn btn-primary" id="consentStart" disabled data-i18n="consentStart" data-testid="button-consent-start">Aufnahme starten</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ============ MAIN ============ -->
   <main class="app-main" id="mainContent">

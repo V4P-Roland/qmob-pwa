@@ -1067,6 +1067,8 @@ a.sr-only:focus-visible {
 .brand-wordmark { height: 22px; width: auto; display: block; }
 .brand-lockup { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1; }
 .brand-lockup .brand-wordmark { height: 24px; }
+/* 12/11/2026: one image lockup, built like the Qalcurate SOLUTIONS logo (same font, size, tracking and gradient) */
+.brand-lockup .brand-lockup-img { height: 32px; width: auto; display: block; }
 .brand-sub {
   margin-top: 1px;
   font-size: 8.5px;
@@ -1092,3 +1094,15 @@ a.sr-only:focus-visible {
 .record-btn::after { border-color: rgba(79, 140, 255, 0.35); }
 [data-recording='true'] .record-btn { background: var(--color-error); }
 .timer, .record-timer { font-variant-numeric: tabular-nums; }
+
+/* Consent before every recording (12/11/2026) */
+.consent-backdrop { position: fixed; inset: 0; z-index: 60; background: rgba(5, 10, 24, 0.55); display: flex; align-items: flex-end; justify-content: center; padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+.consent-backdrop[hidden] { display: none; }
+.consent-sheet { width: 100%; max-width: 480px; background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); }
+@media (min-width: 640px) { .consent-backdrop { align-items: center; } }
+.consent-title { font-size: 18px; font-weight: 600; margin: 0 0 8px; }
+.consent-text { margin: 0 0 16px; color: var(--color-text-muted); line-height: 1.45; }
+.consent-check { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-surface-offset); cursor: pointer; line-height: 1.4; }
+.consent-check input { width: 20px; height: 20px; margin: 1px 0 0; flex: none; accent-color: var(--color-primary); }
+.consent-actions { margin-top: 16px; justify-content: flex-end; }
+.btn[disabled] { opacity: 0.45; cursor: not-allowed; }

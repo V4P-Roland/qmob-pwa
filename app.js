@@ -95,7 +95,7 @@ const I18N = {
     consentCheck: 'Alle Beteiligten haben der Aufnahme zugestimmt.',
     consentStart: 'Aufnahme starten',
     cancel: 'Abbrechen',
-    toastSilenceStop: 'Aufnahme nach 10 Sekunden Stille beendet.',
+    toastSilenceStop: 'Aufnahme nach 20 Sekunden Stille beendet.',
     toastInterrupted: 'Aufnahme unterbrochen, weil das Gerät gesperrt oder die App verlassen wurde. Das Bisherige ist gespeichert.',
     toastWakeLockUnavailable: 'Der Bildschirm kann nicht wach gehalten werden. Bitte das Gerät während der Aufnahme nicht sperren.',
     transcriptLabel: 'Transkript',
@@ -198,7 +198,7 @@ const I18N = {
     consentCheck: 'Everyone taking part has agreed to the recording.',
     consentStart: 'Start recording',
     cancel: 'Cancel',
-    toastSilenceStop: 'Recording stopped after 10 seconds of silence.',
+    toastSilenceStop: 'Recording stopped after 20 seconds of silence.',
     toastInterrupted: 'Recording interrupted because the device was locked or the app was left. Everything up to that point is saved.',
     toastWakeLockUnavailable: 'The screen cannot be kept awake. Please do not lock the device while recording.',
     transcriptLabel: 'Transcript',
@@ -686,8 +686,8 @@ let sourceNode = null;
 let rafId = null;
 
 /* 12/11/2026: keep the screen awake while recording (iOS Home Screen apps from iOS 18.4) and stop after
-   10 s of silence. iOS ends microphone capture when the device locks; what was recorded so far is saved. */
-const SILENCE_STOP_MS = 10000;
+   20 s of silence (same as Qalvy's voice input). iOS ends microphone capture when the device locks; what was recorded so far is saved. */
+const SILENCE_STOP_MS = 20000;
 const SILENCE_MIN_DB = -45;   // same threshold as Qalvy's voice input
 let wakeLock = null;
 let silenceTimer = null;
@@ -1266,9 +1266,18 @@ els.langSelect.addEventListener('change', async () => {
    ========================================================================== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {
+    navigator.serviceWorker.register('./sw.js').then((reg) => reg.update()).catch(() => {
       /* ignore — app still works without offline app-shell caching */
     });
+  });
+  // A new service worker took over: reload once so the new version runs,
+  // but never in the middle of a recording.
+  const hadController = !!navigator.serviceWorker.controller;
+  let swReloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || swReloaded || isRecording) return;
+    swReloaded = true;
+    window.location.reload();
   });
 }
 

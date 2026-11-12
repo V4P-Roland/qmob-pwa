@@ -3,7 +3,7 @@
 /* Qalcurate service worker — caches the app shell so the UI itself loads
    offline. Recording data lives in IndexedDB (handled in app.js), not here. */
 
-const CACHE_NAME = 'qalcurate-shell-v6';
+const CACHE_NAME = 'qalcurate-shell-v7';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -17,7 +17,7 @@ const CORE_ASSETS = [
   './assets/icons/apple-touch-icon.png',
   './assets/icons/favicon-32.png',
   './assets/brand/qalcurate-logo-white.svg',
-  './assets/brand/qalcurate-mobile-dark.png',
+  './assets/brand/qalcurate-mobile-dark-v2.png',
   './assets/brand/favicon.svg',
   './assets/fonts/InterVariable.woff2',
 ];
@@ -59,8 +59,27 @@ self.addEventListener('fetch', (event) => {
 
   const isSameOrigin = url.origin === self.location.origin;
 
+  // HTML, scripts, styles and the manifest: network first so a redeploy is
+  // picked up on the next start; the cache is only the offline fallback.
+  const isShellCode =
+    req.mode === 'navigate' || /\.(?:html|js|css|json)$/.test(url.pathname) || url.pathname.endsWith('/');
+  if (isSameOrigin && isShellCode) {
+    event.respondWith(
+      fetch(req, { cache: 'no-cache' })
+        .then((res) => {
+          if (res && res.ok) {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          }
+          return res;
+        })
+        .catch(() => caches.match(req).then((cached) => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
   if (isSameOrigin) {
-    // App shell: cache-first for instant offline load, refresh cache in background.
+    // Fonts, icons, images: cache-first for instant offline load, refresh cache in background.
     event.respondWith(
       caches.match(req).then((cached) => {
         const networkFetch = fetch(req)

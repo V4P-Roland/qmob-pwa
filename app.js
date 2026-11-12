@@ -31,6 +31,10 @@ const els = {
   recordHint: $('#recordHint'),
   transcriptBox: $('#transcriptBox'),
   asrBanner: $('#asrBanner'),
+  resumeBanner: $('#resumeBanner'),
+  resumeBannerText: $('#resumeBannerText'),
+  resumeContinue: $('#resumeContinue'),
+  resumeDismiss: $('#resumeDismiss'),
   asrBannerText: $('#asrBannerText'),
   asrSupportBadge: $('#asrSupportBadge'),
 
@@ -97,6 +101,12 @@ const I18N = {
     cancel: 'Abbrechen',
     toastSilenceStop: 'Aufnahme nach 20 Sekunden Stille beendet.',
     toastInterrupted: 'Aufnahme unterbrochen, weil das Gerät gesperrt oder die App verlassen wurde. Das Bisherige ist gespeichert.',
+    recordStayHint: 'Bitte die App während der Aufnahme nicht wechseln und das Gerät nicht sperren.',
+    resumeBannerText: 'Die Aufnahme wurde unterbrochen, weil die App verlassen oder das Gerät gesperrt wurde. Teil {n} ({d}) ist gespeichert.',
+    resumeContinue: 'Fortsetzen',
+    resumeDismiss: 'Schließen',
+    partSuffix: 'Teil',
+    toastResumed: 'Aufnahme wird als Teil {n} fortgesetzt.',
     toastWakeLockUnavailable: 'Der Bildschirm kann nicht wach gehalten werden. Bitte das Gerät während der Aufnahme nicht sperren.',
     transcriptLabel: 'Transkript',
     transcriptPlaceholder: 'Das Transkript erscheint hier während der Aufnahme…',
@@ -220,6 +230,12 @@ const I18N = {
     cancel: 'Cancel',
     toastSilenceStop: 'Recording stopped after 20 seconds of silence.',
     toastInterrupted: 'Recording interrupted because the device was locked or the app was left. Everything up to that point is saved.',
+    recordStayHint: 'Please do not switch apps or lock the device while recording.',
+    resumeBannerText: 'The recording was interrupted because the app was left or the device was locked. Part {n} ({d}) is saved.',
+    resumeContinue: 'Continue',
+    resumeDismiss: 'Close',
+    partSuffix: 'Part',
+    toastResumed: 'Recording continues as part {n}.',
     toastWakeLockUnavailable: 'The screen cannot be kept awake. Please do not lock the device while recording.',
     transcriptLabel: 'Transcript',
     transcriptPlaceholder: 'The transcript appears here while recording…',
@@ -979,8 +995,39 @@ function resetRecorderUIAfterSave() {
   els.timer.textContent = '00:00';
 }
 
-async function startRecording() {
-  if (!(await askConsent())) return;
+/* 12/11/2026: continue after an interruption. Browsers end microphone capture when the app is hidden
+   (iOS) or frozen (Android). The part recorded so far is saved; one tap continues as the next part of the
+   same recording (same title, "Part 2", "Part 3", ...). Consent from part 1 covers the continuation for 30 min. */
+const RESUME_WINDOW_MS = 30 * 60 * 1000;
+let resumeCtx = null;      // { sessionId, baseTitle, typedTitle, lastPart, durationSec, at }
+let currentPart = null;    // { sessionId, part, baseTitle, typedTitle } while recording
+
+function newId() {
+  return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
+}
+function showResumeBanner() {
+  if (!resumeCtx || Date.now() - resumeCtx.at > RESUME_WINDOW_MS) { hideResumeBanner(); return; }
+  els.resumeBannerText.textContent = t('resumeBannerText')
+    .replace('{n}', String(resumeCtx.lastPart))
+    .replace('{d}', formatDuration(resumeCtx.durationSec || 0));
+  els.resumeBanner.hidden = false;
+}
+function hideResumeBanner() {
+  els.resumeBanner.hidden = true;
+}
+els.resumeContinue.addEventListener('click', () => {
+  if (isRecording) return;
+  if (!resumeCtx || Date.now() - resumeCtx.at > RESUME_WINDOW_MS) { resumeCtx = null; hideResumeBanner(); startRecording(); return; }
+  startRecording({ resume: true });
+});
+els.resumeDismiss.addEventListener('click', () => { resumeCtx = null; hideResumeBanner(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && !isRecording && resumeCtx) showResumeBanner();
+});
+
+async function startRecording(opts = {}) {
+  const resume = !!(opts.resume && resumeCtx);
+  if (!resume && !(await askConsent())) return;
   try {
     mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
   } catch (err) {
@@ -1014,6 +1061,16 @@ async function startRecording() {
   });
   recordingStartedAt = new Date().toISOString();
   stopReason = null;
+  if (resume) {
+    currentPart = { sessionId: resumeCtx.sessionId, part: resumeCtx.lastPart + 1, baseTitle: resumeCtx.baseTitle, typedTitle: resumeCtx.typedTitle };
+    els.titleInput.value = resumeCtx.typedTitle;
+    showToast(t('toastResumed').replace('{n}', String(currentPart.part)));
+  } else {
+    const typed = els.titleInput.value.trim();
+    currentPart = { sessionId: newId(), part: 1, baseTitle: typed || defaultTitle(), typedTitle: typed };
+  }
+  resumeCtx = null;
+  hideResumeBanner();
 
   isRecording = true;
   els.appShell.classList.add('is-recording');
@@ -1084,16 +1141,28 @@ async function onRecorderStop() {
     return;
   }
   const reason = stopReason; stopReason = null;
-  await saveRecording(blob, mimeType, elapsedSeconds, finalTranscript.trim());
+  const part = currentPart; currentPart = null;
+  await saveRecording(blob, mimeType, elapsedSeconds, finalTranscript.trim(), part);
   if (reason === 'silence') showToast(t('toastSilenceStop'));
-  else if (reason === 'interrupted') showToast(t('toastInterrupted'));
+  else if (reason === 'interrupted') {
+    if (part) {
+      resumeCtx = { sessionId: part.sessionId, baseTitle: part.baseTitle, typedTitle: part.typedTitle, lastPart: part.part, durationSec: elapsedSeconds, at: Date.now() };
+      if (document.visibilityState === 'visible') showResumeBanner();
+    } else showToast(t('toastInterrupted'));
+  }
 }
 
-async function saveRecording(blob, mimeType, durationSec, transcript) {
+async function saveRecording(blob, mimeType, durationSec, transcript, part = null) {
+  const typed = els.titleInput.value.trim();
+  const isLaterPart = part && part.part > 1;
+  const suffix = isLaterPart ? ` (${t('partSuffix')} ${part.part})` : '';
   const rec = {
-    id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)),
-    title: els.titleInput.value.trim() || defaultTitle(),
-    recordingTitle: els.titleInput.value.trim(),   // only what the user typed; empty = no title
+    id: newId(),
+    title: (isLaterPart ? part.baseTitle : (typed || defaultTitle())) + suffix,
+    // only what the user typed; empty = no title. Later parts always carry the title of part 1 plus "Part n"
+    recordingTitle: isLaterPart ? part.baseTitle + suffix : typed,
+    sessionId: part ? part.sessionId : null,
+    part: part ? part.part : 1,
     startedAt: recordingStartedAt || new Date().toISOString(),
     createdAt: new Date().toISOString(),
     durationSec,

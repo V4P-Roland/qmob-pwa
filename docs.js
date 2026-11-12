@@ -4,7 +4,7 @@
    German is the binding version of the legal texts; English is a courtesy translation.
    Rendered into #view-doc by app.js (openDoc). Plain HTML strings, no external requests. */
 
-const APP_VERSION = '1.1.1';
+const APP_VERSION = '1.1.2';
 const DOCS_AS_OF = { de: '12.11.2026', en: '12 November 2026' };
 
 const PROVIDER = {
@@ -82,7 +82,7 @@ const DOCS = {
 <ul>
 <li>Während einer Aufnahme bleibt der Bildschirm an, wenn Du die App vom Home-Bildschirm gestartet hast (iPhone ab iOS 18.4).</li>
 <li>Wird der Bildschirm trotzdem dunkel, läuft die Aufnahme weiter. Oben in der Statusleiste erscheint ein <strong>Mikrofonsymbol</strong>. Tippst Du darauf, kommst Du nach dem Entsperren direkt zurück in die App.</li>
-<li>Sperrst Du das iPhone mit der <strong>Seitentaste</strong> oder wechselst Du in eine andere App, beendet iOS die Aufnahme. Alles bis dahin Aufgenommene wird gespeichert.</li>
+<li>Sperrst Du das iPhone mit der <strong>Seitentaste</strong> oder wechselst Du in eine andere App, beendet iOS die Aufnahme. Alles bis dahin Aufgenommene wird gespeichert. Kommst Du zurück, tippst Du auf <strong>„Fortsetzen“</strong>. Die Fortsetzung wird als „Teil 2“ mit demselben Titel gespeichert.</li>
 <li>Eine Anzeige mit Stopp-Knopf direkt auf dem Sperrbildschirm ist mit einer Web-App technisch nicht möglich.</li>
 </ul>
 </details>
@@ -337,7 +337,7 @@ ${asOf('de')}`,
 <ul>
 <li>While recording, the screen stays on if you started the app from the Home Screen (iPhone with iOS 18.4 or later).</li>
 <li>If the screen still goes dark, recording continues. A <strong>microphone icon</strong> appears in the status bar; tap it to return to the app after unlocking.</li>
-<li>If you lock the iPhone with the <strong>side button</strong> or switch to another app, iOS stops the recording. Everything recorded up to then is saved.</li>
+<li>If you lock the iPhone with the <strong>side button</strong> or switch to another app, iOS stops the recording. Everything recorded up to then is saved. When you come back, tap <strong>“Continue”</strong>. The continuation is saved as “Part 2” with the same title.</li>
 <li>A lock-screen indicator with a stop button is technically not possible for a web app.</li>
 </ul>
 </details>

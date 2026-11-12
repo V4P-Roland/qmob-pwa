@@ -138,6 +138,17 @@
         <span id="asrBannerText" data-i18n="asrNotSupported">Live-Transkription wird von diesem Browser nicht unterstützt. Die Audioaufnahme funktioniert trotzdem — installiere die App am besten in Chrome oder Edge für Live-Transkription.</span>
       </div>
 
+      <div class="banner banner-resume" id="resumeBanner" hidden data-testid="banner-resume">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/></svg>
+        <div class="banner-body">
+          <span id="resumeBannerText">Die Aufnahme wurde unterbrochen, weil die App verlassen wurde. Teil 1 ist gespeichert.</span>
+          <div class="btn-row banner-actions">
+            <button class="btn btn-secondary" id="resumeDismiss" data-i18n="resumeDismiss" data-testid="button-resume-dismiss">Schließen</button>
+            <button class="btn btn-primary" id="resumeContinue" data-i18n="resumeContinue" data-testid="button-resume-continue">Fortsetzen</button>
+          </div>
+        </div>
+      </div>
+
       <div class="recorder-card" data-recording="false" id="recorderCard">
         <div class="title-input-row">
           <label for="titleInput" data-i18n="titleInputLabel">Titel der Aufnahme</label>
@@ -170,6 +181,7 @@
           </button>
         </div>
         <p class="record-hint" id="recordHint" data-i18n="recordHintStart">Tippen, um die Aufnahme zu starten</p>
+        <p class="record-stay-hint" id="recordStayHint" data-i18n="recordStayHint">Bitte die App während der Aufnahme nicht wechseln und das Gerät nicht sperren.</p>
 
         <div class="transcript-panel">
           <div class="transcript-label">
